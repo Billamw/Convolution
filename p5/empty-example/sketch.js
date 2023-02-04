@@ -3,15 +3,15 @@ let xMax = 5;
 let yMin = -4;
 let yMax = 6;
 
-let offset = 0;
-let offset2 = 0;
+let t0 = 0;
+let t02 = 0;
 let T = 1;
 let T2 = 1;
 
-let a1 = offset2 - T2/2;
-let b1 = offset + T/2;
-let a2 = offset - T/2;
-let b2 = offset2 + T2/2; 
+let a1 = t02 - T2/2;
+let b1 = t0 + T/2;
+let a2 = t0 - T/2;
+let b2 = t02 + T2/2; 
 
 let impuls1 = rectImpuls;
 let impuls2 = rectImpuls;
@@ -19,8 +19,8 @@ let impuls2 = rectImpuls;
 function setup() {
   createCanvas(600, 600);
 
-  sliderOffset = createSlider(xMin, xMax, 0, 0.1);
-  sliderOffset.style('width', '300px')
+  slidert0 = createSlider(xMin, xMax, 0, 0.1);
+  slidert0.style('width', '300px')
   sliderT = createSlider(0.1, 4, 1, 0.1);
   stroke(0);
   noFill();
@@ -29,16 +29,16 @@ function setup() {
 
 function draw() {
   background(255);
-  offset = sliderOffset.value();
-  b1 = offset + T/2;
-  a2 = offset - T/2;
+  t0 = slidert0.value();
+  b1 = t0 + T/2;
+  a2 = t0 - T/2;
   T = sliderT.value();
 
   text(integral(impuls2, a1, b1), 10, 10);
 
-  drawImpuls(impuls1, offset, T);
+  drawImpuls(impuls1, t0, T);
 
-  drawImpuls(impuls2, offset2, T2);
+  drawImpuls(impuls2, t02, T2);
 
 
   beginShape();
@@ -46,7 +46,7 @@ function draw() {
     let y = 0;
     //y = borders();
     y = convolution(impuls1, impuls2, x);
-    //point(offset, y);
+    //point(t0, y);
 
     vertex(map(x, xMin, xMax, 0, width), map(y, yMin, yMax, height, 0));
   }
@@ -71,10 +71,10 @@ function triangularImpuls(t) {
   }
 }
 
-function drawImpuls(impuls, offset, T) {
+function drawImpuls(impuls, t0, T) {
   beginShape();
   for (let x = xMin; x <= xMax; x += 0.01) {
-    let y = impuls((x-offset)/T);
+    let y = impuls((x-t0)/T);
     vertex(map(x, xMin, xMax, 0, width), map(y, yMin, yMax, height, 0));
   }
   endShape();
@@ -115,6 +115,7 @@ function integral(f, a, b) {
 
   x1 = a;
   x2 = a + dx;
+
   for (let i = a; i < b; i+= dx) {
     y1 = f(x1);
     y2 = f(x2);
@@ -122,6 +123,6 @@ function integral(f, a, b) {
     x1 = x2;
     x2 = x1 + dx;
   }
-  //adding 0.01 for beatuy reasons
+
   return sum;
 }
