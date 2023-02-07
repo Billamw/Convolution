@@ -40,7 +40,7 @@ function draw() {
 
   drawImpuls(impuls2, t02, T2);
 
-
+ //Test
   beginShape();
   for (let x = xMin; x <= xMax; x += 0.01) {
     let y = 0;
