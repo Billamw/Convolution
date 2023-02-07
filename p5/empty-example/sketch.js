@@ -35,23 +35,23 @@ function draw() {
   T = sliderT.value();
 
   text(integral(impuls2, a1, b1), 10, 10);
+  
 
   drawImpuls(impuls1, t0, T);
 
   drawImpuls(impuls2, t02, T2);
 
- //Test
+  stroke(255,0,0);
   beginShape();
-  for (let x = xMin; x <= xMax; x += 0.01) {
+  for (let x = xMin; x <= t0; x += 0.01) {
     let y = 0;
     //y = borders();
     y = convolution(impuls1, impuls2, x);
     //point(t0, y);
-
-    vertex(map(x, xMin, xMax, 0, width), map(y, yMin, yMax, height, 0));
+    point(map(x, xMin, xMax, 0, width), map(y, yMin, yMax, height, 0));
   }
   endShape();
-  
+  stroke(0);
 }
 
 
@@ -82,9 +82,27 @@ function drawImpuls(impuls, t0, T) {
 
 function convolution(signal1, signal2, time) {
   let result = 0;
-  for (let tau = -time; tau <= time; tau += 0.01) {
-    result += signal1(tau) * signal2(time - tau);
+  // for (let tau = -time; tau <= time; tau += 0.01) {
+  //   result += signal1(tau) * signal2(time - tau);
+  // }
+
+  if(a1 > b1) {
+    result = 0 
+  } else if(a1 > b2) {
+    //result = integral(impuls1, a1, b1) * integral(impuls2, a1, b1);
+    //result = integral(convoFunc(time),a1, b1); //Ich muss noch mal verstehen wie die Faltung rechnerisch wirklich funktioniert.
+    result = integralConvo(signal1, signal2, a1, b1, time);
+  } else if(b2 > b1) {
+    //result = integral(impuls1, a2, b1) * integral(impuls2, a2, b1);
+    //result = integral(convoFunc(time),a2, b1);
+    result = integralConvo(signal1, signal2, a2, b1, time);
+  } else if(b2 > a2) {
+    //result = integral(impuls1, a2, b2) * integral(impuls2, a2, b2);
+    result = integralConvo(signal1, signal2, a2, b2, time);
+  }  else if(a2 > b2) {
+    result = 0;
   }
+  
   return result;
 }
 
@@ -119,6 +137,26 @@ function integral(f, a, b) {
   for (let i = a; i < b; i+= dx) {
     y1 = f(x1);
     y2 = f(x2);
+    sum += (x2 - x1) * (y1 + y2) / 2;
+    x1 = x2;
+    x2 = x1 + dx;
+  }
+
+  return sum;
+}
+
+function integralConvo(f1, f2, a, b, time) {
+  
+  let x1, x2, y1, y2;
+  let dx = 0.001;
+  let sum = 0;
+
+  x1 = a;
+  x2 = a + dx;
+
+  for (let i = a; i < b; i+= dx) {
+    y1 = f1(x1) * f2(time-x1);
+    y2 = f1(x2) * f2(time-x2);
     sum += (x2 - x1) * (y1 + y2) / 2;
     x1 = x2;
     x2 = x1 + dx;
