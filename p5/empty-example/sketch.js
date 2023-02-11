@@ -14,7 +14,7 @@ let a2 = t0 - T/2;
 let b2 = t02 + T2/2; 
 
 let impuls1 = rectImpuls;
-let impuls2 = rectImpuls;
+let impuls2 = pralbolaImpuls;
 
 function setup() {
   createCanvas(600, 600);
@@ -24,7 +24,6 @@ function setup() {
   sliderT = createSlider(0.1, 4, 1, 0.1);
   stroke(0);
   noFill();
-
 }
 
 function draw() {
@@ -34,11 +33,7 @@ function draw() {
   a2 = t0 - T/2;
   T = sliderT.value();
 
-  text(integral(impuls2, a1, b1), 10, 10);
-  
-
   drawImpuls(impuls1, t0, T);
-
   drawImpuls(impuls2, t02, T2);
 
   stroke(255,0,0);
@@ -52,6 +47,11 @@ function draw() {
   }
   endShape();
   stroke(0);
+
+  text('a1', map(a1, xMin, xMax, 0, width), 390);
+  text('b1', map(b1, xMin, xMax, 0, width), 370);
+  text('a2', map(a2, xMin, xMax, 0, width), 370);
+  text('b2', map(b2, xMin, xMax, 0, width), 390);
 }
 
 
@@ -71,6 +71,13 @@ function triangularImpuls(t) {
   }
 }
 
+function pralbolaImpuls(t) {
+  if(abs(t)<=0.5){
+    return (t-.5)*(t-.5);
+  }
+  return 0;
+}
+
 function drawImpuls(impuls, t0, T) {
   beginShape();
   for (let x = xMin; x <= xMax; x += 0.01) {
@@ -86,20 +93,27 @@ function convolution(signal1, signal2, time) {
   //   result += signal1(tau) * signal2(time - tau);
   // }
 
-  if(a1 > b1) {
-    result = 0 
-  } else if(a1 > b2) {
+  // if(a1 > b1) {
+  //   result = 0 
+  // } 
+  if(b1 > b2) {
     //result = integral(impuls1, a1, b1) * integral(impuls2, a1, b1);
     //result = integral(convoFunc(time),a1, b1); //Ich muss noch mal verstehen wie die Faltung rechnerisch wirklich funktioniert.
     result = integralConvo(signal1, signal2, a1, b1, time);
-  } else if(b2 > b1) {
+  } 
+  else if(b2 > b1) {
     //result = integral(impuls1, a2, b1) * integral(impuls2, a2, b1);
     //result = integral(convoFunc(time),a2, b1);
     result = integralConvo(signal1, signal2, a2, b1, time);
-  } else if(b2 > a2) {
+  } 
+  else if(b2 > a2) {
     //result = integral(impuls1, a2, b2) * integral(impuls2, a2, b2);
     result = integralConvo(signal1, signal2, a2, b2, time);
-  }  else if(a2 > b2) {
+  } 
+  // else if(a2 > b2) {
+  //   result = 0;
+  // }
+  else{
     result = 0;
   }
   
@@ -157,7 +171,11 @@ function integralConvo(f1, f2, a, b, time) {
   for (let i = a; i < b; i+= dx) {
     y1 = f1(x1) * f2(time-x1);
     y2 = f1(x2) * f2(time-x2);
-    sum += (x2 - x1) * (y1 + y2) / 2;
+    // y1 = f1( (x1 - t0) / T) * f2( ((time-x1) - t02) / T2);
+    // y2 = f1( (x2 - t0) / T) * f2( ((time-x2) - t02) / T2);
+
+    //calculating the area of a sub rectangle
+    sum += dx * (y1 + y2) / 2;
     x1 = x2;
     x2 = x1 + dx;
   }
