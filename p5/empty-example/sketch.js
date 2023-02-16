@@ -16,7 +16,7 @@ let b2 = t02 + T2/2;
 let functionInput;
 
 let impuls1 = rectImpuls;
-let impuls2 = triangularImpuls;
+let impuls2 = randomImpuls;
 
 function setup() {
   createCanvas(600, 600);
@@ -73,6 +73,10 @@ function triangularImpuls(T, t) {
   else {
     return 0;
   }
+}
+
+function randomImpuls(T, t) {
+  return rectImpuls(1, t) + rectImpuls(.5, t-1);
 }
 
 function paralbolaImpuls(T, t) {
