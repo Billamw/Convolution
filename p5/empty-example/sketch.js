@@ -16,14 +16,14 @@ let b2 = t02 + T2/2;
 let functionInput;
 
 let impuls1 = rectImpuls;
-let impuls2 = paralbolaImpuls;
+let impuls2 = triangularImpuls;
 
 function setup() {
   createCanvas(600, 600);
 
   slidert0 = createSlider(xMin, xMax, -2, 0.05);
   slidert0.style('width', '300px')
-  sliderT = createSlider(1, 3, 1, 1);
+  sliderT = createSlider(.5, 2, .5, .5);
 
   functionInput = createInput("x*x");
   functionInput.position(20,20);
@@ -34,6 +34,7 @@ function setup() {
 
 function draw() {
   background(255);
+
   t0 = slidert0.value();
   b1 = t0 + T/2;
   a2 = t0 - T/2;
@@ -58,23 +59,23 @@ function draw() {
 }
 
 
-function rectImpuls(t) {
-  if(abs(t)<=0.5){
-    return 1;
+function rectImpuls(T, t) {
+  if(abs(t)<=T/2){
+    return 1/T;
   }
   return 0;
 }
 
-function triangularImpuls(t) {
-  if(abs(t) <= 1) {
-    return (1-abs(t));
+function triangularImpuls(T, t) {
+  if(abs(t) <= T) {
+    return (1/T*(1-abs(t)/T));
   }
   else {
     return 0;
   }
 }
 
-function paralbolaImpuls(t) {
+function paralbolaImpuls(T, t) {
   if(abs(t)<=0.5){
     return (t-.5)*(t-.5);
   }
@@ -95,7 +96,7 @@ function evalFunction(x) {
 function drawImpuls(impuls, t0, T) {
   beginShape();
   for (let x = xMin; x <= xMax; x += 0.01) {
-    let y = impuls((x-t0)/T);
+    let y = impuls(T,(x-t0));
     vertex(map(x, xMin, xMax, 0, width), map(y, yMin, yMax, height, 0));
   }
   endShape();
@@ -112,8 +113,8 @@ function drawConvolution(impuls1, impuls2) {
 }
 
 function convolution(impuls1, impuls2, t) {
-  let a = a1;
-  let b = b1;
+  let a = a1-T/2;
+  let b = b2+T/2;
   let tau1, tau2, y1, y2;
   let dtau = 0.001;
   let result = 0;
@@ -125,8 +126,8 @@ function convolution(impuls1, impuls2, t) {
   for (let i = a; i < b; i+= dtau) {
 
     // continous convolution
-    y1 = impuls1(tau1 / T) * impuls2((t-tau1)/ T);
-    y2 = impuls1(tau2 / T) * impuls2((t-tau2)/ T2);
+    y1 = impuls1(T, tau1) * impuls2(T2, (t-tau1));
+    y2 = impuls1(T, tau2) * impuls2(T2, (t-tau2));
 
     // calculating the area of a sub rectangle
     result += dtau * (y1 + y2) / 2;

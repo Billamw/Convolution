@@ -16,8 +16,12 @@ let b2 = t02 + T2/2;
 let impuls1 = rectImpuls;
 let impuls2 = pralbolaImpuls;
 
+let formula = '';
+let canvas;
+
 function setup() {
-  createCanvas(600, 600);
+  canvas = createCanvas(600, 600);
+  canvas.parent('canvas-container');
 
   slidert0 = createSlider(xMin, xMax, 0, 0.1);
   slidert0.style('width', '300px')
@@ -25,6 +29,10 @@ function setup() {
   stroke(0);
   noFill();
 }
+
+document.getElementById('submit-button').addEventListener('click', () => {
+  formula = document.getElementById('formula-input').value;
+});
 
 function draw() {
   background(255);
