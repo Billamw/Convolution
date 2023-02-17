@@ -16,7 +16,11 @@ let b2 = t02 + T2/2;
 let functionInput;
 
 let impuls1 = rectImpuls;
+<<<<<<< Updated upstream
 let impuls2 = randomImpuls;
+=======
+let impuls2 = paralbolaImpuls;
+>>>>>>> Stashed changes
 
 function setup() {
   createCanvas(600, 600);
@@ -81,7 +85,7 @@ function randomImpuls(T, t) {
 
 function paralbolaImpuls(T, t) {
   if(abs(t)<=0.5){
-    return (t-.5)*(t-.5);
+    return 2*(t+.5)*(t+1);
   }
   return 0;
 }
