@@ -24,7 +24,7 @@ function setup() {
 
   slidert0 = createSlider(xMin, xMax, -2, 0.05);
   slidert0.style('width', '300px')
-  sliderT = createSlider(.5, 2, 1, .5);
+  sliderT = createSlider(.5, 2, .5, .5);
 
   functionInput = createInput("x*x");
   functionInput.position(20,20);
@@ -77,7 +77,7 @@ function triangularImpuls(t) {
 }
 
 function randomFunction(t) {
-  return rectImpuls(t) + rectImpuls(2*(t-1));
+  return rectImpuls(1, t) + rectImpuls(.5, t-1);
 }
 
 function paralbolaFunction(t) {
@@ -131,8 +131,8 @@ function convolution(impuls1, impuls2, t) {
   for (let i = a; i < b; i+= dtau) {
 
     // continous convolution
-    y1 = impuls1(tau1/T) * impuls2((t-tau1)/T2);
-    y2 = impuls1(tau2/T) * impuls2((t-tau2)/T2);
+    y1 = impuls1(T, tau1) * impuls2(T2, (t-tau1));
+    y2 = impuls1(T, tau2) * impuls2(T2, (t-tau2));
 
     // calculating the area of a sub rectangle
     result += dtau * (y1 + y2) / 2;
