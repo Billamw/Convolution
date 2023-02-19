@@ -25,6 +25,7 @@ function draw() {
   
   t0 = slidert0.value();
   drawSignal(signal1, t0);
+  drawDiscretConvolution(signal1, signal2, t0);
   text(t0, 100, 100);
 
 
@@ -43,16 +44,26 @@ function drawSignal(signal, t) {
     }
 }
 
-function discreteConvolution(x, h) {
+function drawDiscretConvolution(signal1, signal2, t)  {
+  drawSignal(discreteConvolution(signal1, signal2), t)
+}
+
+function discreteConvolution(x, h, t) {
   const N = x.length;
   const M = h.length;
   const y = new Array(N + M - 1).fill(0);
 
-  for (let n = 0; n < N + M - 1; n++) {
-    for (let k = 0; k < N; k++) {
-      if (n - k < 0 || n - k >= M) continue;
-      y[n] += x[k] * h[n - k];
-    }
+  // for (let n = 0; n < N + M - 1; n++) {
+  //   for (let k = 0; k < N; k++) {
+  //     if (n - k < 0 || n - k >= M) continue;
+  //     y[n] += x[k] * h[n - k];
+  //   }
+  // }
+
+
+  for (let k = 0; k < N; k++) {
+    if (t - k < 0 || t - k >= M) continue;
+    y[t] += x[k] * h[t - k];
   }
 
   return y;
