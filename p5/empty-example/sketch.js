@@ -87,17 +87,6 @@ function paralbolaFunction(t) {
   return 0;
 }
 
-// trying to do a lifetime function Input
-function evalFunction(x) {
-  let f = functionInput.value();
-
-  if(abs(x)<=0.5){
-    return eval(f);
-  }
-  return 0;
-
-}
-
 function drawImpuls(impuls, t0, T) {
   beginShape();
   for (let x = xMin; x <= xMax; x += 0.01) {
@@ -110,9 +99,9 @@ function drawImpuls(impuls, t0, T) {
 function drawConvolution(impuls1, impuls2) {
   let y = 0;
   beginShape();
-  for (let x = xMin; x <= t0; x += 0.01) {
-    y = convolution(impuls1, impuls2, x);
-    vertex(map(x, xMin, xMax, 0, width), map(y, yMin, yMax, height, 0));
+  for (let t = xMin; t <= t0; t += 0.01) {
+    y = convolution(impuls1, impuls2, t);
+    vertex(map(t, xMin, xMax, 0, width), map(y, yMin, yMax, height, 0));
   }
   endShape();
 }
