@@ -24,10 +24,8 @@ function setup() {
 
   slidert0 = createSlider(xMin, xMax, -2, 0.05);
   slidert0.style('width', '300px')
-  sliderT = createSlider(.5, 2, 1, .5);
-
-  functionInput = createInput("x*x");
-  functionInput.position(20,20);
+  inputT = createInput('1');
+  inputT.size(20);
 
   stroke(0);
   noFill();
@@ -39,7 +37,9 @@ function draw() {
   t0 = slidert0.value();
   b1 = t0 + T/2;
   a2 = t0 - T/2;
-  T = sliderT.value();
+
+  T = inputT.value();
+
 
   drawImpuls(impuls1, t0, T);
   drawImpuls(impuls2, t02, T2);
@@ -71,18 +71,17 @@ function triangularImpuls(t) {
   if(abs(t) <= 1) {
     return 1-abs(t);
   }
-  else {
-    return 0;
-  }
+  return 0;
 }
 
 function randomFunction(t) {
-  return rectImpuls(t) + rectImpuls(2*(t-1));
+  return rectImpuls(t) + .5*triangularImpuls(2*t) + paralbolaFunction(t-1);
+  //return convolution(rectImpuls, rectImpuls, t);
 }
 
 function paralbolaFunction(t) {
   if(abs(t)<=0.5){
-    return 2*(t+.5)*(t+1);
+    return (t-.5)*(t-.5);
   }
   return 0;
 }
@@ -107,17 +106,15 @@ function drawConvolution(impuls1, impuls2) {
 }
 
 function convolution(impuls1, impuls2, t) {
-  let a = a1-T/2;
-  let b = b2+T/2;
   let tau1, tau2, y1, y2;
-  let dtau = 0.001;
+  let dtau = 0.01;
   let result = 0;
 
-  tau1 = a;
-  tau2 = a + dtau;
+  tau1 = a1-T/2;
+  tau2 = a1-T/2 + dtau;
 
   // making sub rectangles for approximatin overlapping area
-  for (let i = a; i < b; i+= dtau) {
+  for (let i = a1-T/2; i <b2+T/2; i+= dtau) {
 
     // continous convolution
     y1 = impuls1(tau1/T) * impuls2((t-tau1)/T2);
