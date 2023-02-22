@@ -15,7 +15,7 @@ let b2 = t02 + T2/2;
 
 let functionInput;
 
-let impuls1 = rectImpuls;
+let impuls1 = triangularImpuls;
 let impuls2 = randomImpuls;
 
 function setup() {
@@ -23,10 +23,7 @@ function setup() {
 
   slidert0 = createSlider(xMin, xMax, -2, 0.05);
   slidert0.style('width', '300px')
-  sliderT = createSlider(.5, 2, .5, .5);
-
-  functionInput = createInput("x*x");
-  functionInput.position(20,20);
+  sliderT = createSlider(.5, 2, 1, .5);
 
   stroke(0);
   noFill();
