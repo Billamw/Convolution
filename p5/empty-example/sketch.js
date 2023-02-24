@@ -15,8 +15,8 @@ let b2 = t02 + T2/2;
 
 let functionInput;
 
-let impuls1 = triangularImpuls;
-let impuls2 = randomImpuls;
+let st = randomImpuls;
+let ht = rectImpuls;
 
 function setup() {
   createCanvas(600, 600);
@@ -37,13 +37,13 @@ function draw() {
   a2 = t0 - T/2;
   T = sliderT.value();
 
-  drawImpuls(impuls1, t0, T);
-  drawImpuls(impuls2, t02, T2);
+  drawst(st, t02, T2);
+  drawht(ht, t0, T);
 
   stroke(255,0,0);
   strokeWeight(2);
 
-  drawConvolution(impuls1, impuls2);
+  drawConvolution(st, ht);
 
   strokeWeight(1);
   stroke(0);
@@ -73,7 +73,11 @@ function triangularImpuls(T, t) {
 }
 
 function randomImpuls(T, t) {
-  return rectImpuls(1, t) + rectImpuls(.5, t-1);
+  //return rectImpuls(1, t) + rectImpuls(.5, t-1);
+  if(t>-.5 && t<.5) {
+    return t+.5;
+  }
+  return 0;
 }
 
 function paralbolaImpuls(T, t) {
@@ -83,18 +87,7 @@ function paralbolaImpuls(T, t) {
   return 0;
 }
 
-// trying to do a lifetime function Input
-function evalFunction(x) {
-  let f = functionInput.value();
-
-  if(abs(x)<=0.5){
-    return eval(f);
-  }
-  return 0;
-
-}
-
-function drawImpuls(impuls, t0, T) {
+function drawst(impuls, t0, T) {
   beginShape();
   for (let x = xMin; x <= xMax; x += 0.01) {
     let y = impuls(T,(x-t0));
@@ -103,17 +96,27 @@ function drawImpuls(impuls, t0, T) {
   endShape();
 }
 
-function drawConvolution(impuls1, impuls2) {
-  let y = 0;
+function drawht(impuls, t0, T) {
   beginShape();
-  for (let x = xMin; x <= t0; x += 0.01) {
-    y = convolution(impuls1, impuls2, x);
+  for (let x = xMin; x <= xMax; x += 0.01) {
+    // mirroring the graph around the y achsis
+    let y = impuls(T,(-x+t0));
     vertex(map(x, xMin, xMax, 0, width), map(y, yMin, yMax, height, 0));
   }
   endShape();
 }
 
-function convolution(impuls1, impuls2, t) {
+function drawConvolution(st, ht) {
+  let y = 0;
+  beginShape();
+  for (let x = xMin; x <= t0; x += 0.01) {
+    y = convolution(st, ht, x);
+    vertex(map(x, xMin, xMax, 0, width), map(y, yMin, yMax, height, 0));
+  }
+  endShape();
+}
+
+function convolution(st, ht, t) {
   let a = a1-T/2;
   let b = b2+T/2;
   let tau1, tau2, y1, y2;
@@ -127,8 +130,8 @@ function convolution(impuls1, impuls2, t) {
   for (let i = a; i < b; i+= dtau) {
 
     // continous convolution
-    y1 = impuls1(T, tau1) * impuls2(T2, (t-tau1));
-    y2 = impuls1(T, tau2) * impuls2(T2, (t-tau2));
+    y1 = st(T, tau1) * ht(T2, (t-tau1));
+    y2 = st(T, tau2) * ht(T2, (t-tau2));
 
     // calculating the area of a sub rectangle
     result += dtau * (y1 + y2) / 2;
