@@ -6,8 +6,8 @@ let yMax = 10;
 // let signal1 = [.3,.6,.7,.8,.9];
 // let signal2 = [.9,.8,.7,.8];
 
-let signal1 = [1,1,1,1];
-let signal2 = [1,1,1,1];
+let signal1 = [1,1.5,2,2.5];
+let signal2 = [1,1.5,2,2.5];
 
 let t0 = 0;
 let t02 = 0-signal2.length/2;
@@ -29,7 +29,7 @@ function draw() {
   
   t0 = slidert0.value();
   drawSignal(signal1, t0);
-  drawSignal(signal2, t02);
+  drawht(signal2, t02);
   drawDiscretConvolution(signal1, signal2, t02);
 
 }
@@ -42,6 +42,20 @@ function drawSignal(signal, t) {
       }
       tmp = map(x+t, xMin, xMax, 0, width);
       y = map(signal[x], yMin, yMax, height, 0)
+      strokeWeight(5);
+      point(tmp,y);
+      strokeWeight(2);
+      line(tmp, map(0, yMin, yMax, height, 0), tmp, y);
+    }
+}
+function drawht(signal, t) {
+    let y, tmp;
+    for (let x = 0; x < signal.length; x++) {
+      if(signal[signal.length-1-x] == 0) {
+        continue;
+      }
+      tmp = map(x+t, xMin, xMax, 0, width);
+      y = map(signal[signal.length-1-x], yMin, yMax, height, 0)
       strokeWeight(5);
       point(tmp,y);
       strokeWeight(2);
