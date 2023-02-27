@@ -39,7 +39,7 @@ function draw() {
 
   T = inputT.value();
 
-  text(evalTest(functionInput.value()), 100, 100);
+  text(evalTest(functionInput.value(), t0), 100, 100);
 
   drawst(st, t02, T2);
   drawht(ht, t0, T);
@@ -59,7 +59,7 @@ function draw() {
 
 }
 
-function evalTest(input = '') {
+function evalTest(input = '', t) {
   let buffer = ''
   Number(input);
   for (let i = 0; i < input.length; i++) {
@@ -72,9 +72,11 @@ function evalTest(input = '') {
     // }
   }
 
+  let a = eval?.(input);
+  
 
   text(buffer, 10,10);
-  return buffer;
+  return a;
 }
 
 
