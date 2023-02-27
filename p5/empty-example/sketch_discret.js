@@ -21,7 +21,6 @@ function setup() {
 
   stroke(0);
   noFill();
- 
 }
 
 function draw() {

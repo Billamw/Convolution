@@ -26,7 +26,7 @@ function setup() {
   slidert0.style('width', '300px')
   inputT = createInput('1');
   inputT.size(20);
-
+  functionInput = createInput('3');
   stroke(0);
   noFill();
 }
@@ -40,6 +40,7 @@ function draw() {
 
   T = inputT.value();
 
+  text(evalTest(functionInput), 100, 100);
 
   drawImpuls(impuls1, t0, T);
   drawImpuls(impuls2, t02, T2);
@@ -57,6 +58,21 @@ function draw() {
   // text('a2', map(a2, xMin, xMax, 0, width), 370);
   // text('b2', map(b2, xMin, xMax, 0, width), 390);
 
+}
+
+function evalTest(input = '') {
+  let buffer = ''
+  console.log(typeof Number(input));
+  Number(input);
+  for (let i = 0; i < input.length; i++) {
+    const element = input[i];
+    if(typeof Number(element) == 'number') {
+      buffer += element;
+    }
+  }
+  
+  //text(buffer, 10,10);
+  return input;
 }
 
 
