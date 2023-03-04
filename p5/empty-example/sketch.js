@@ -8,10 +8,10 @@ let t02 = 0;
 let T = 1;
 let T2 = 1;
 
-let a1 = t02 - T2/2;
-let b1 = t0 + T/2;
-let a2 = t0 - T/2;
-let b2 = t02 + T2/2; 
+let a1 = t02 - T2 / 2;
+let b1 = t0 + T / 2;
+let a2 = t0 - T / 2;
+let b2 = t02 + T2 / 2;
 
 let functionInput;
 
@@ -34,8 +34,8 @@ function draw() {
   background(255);
 
   t0 = slidert0.value();
-  b1 = t0 + T/2;
-  a2 = t0 - T/2;
+  b1 = t0 + T / 2;
+  a2 = t0 - T / 2;
 
   T = inputT.value();
 
@@ -44,7 +44,7 @@ function draw() {
   drawst(st, t02, T2);
   drawht(ht, t0, T);
 
-  stroke(255,0,0);
+  stroke(255, 0, 0);
   strokeWeight(2);
 
   drawConvolution(st, ht);
@@ -59,12 +59,13 @@ function draw() {
 
 }
 
+// tryed a evalFunction -> new: Dropdownmenu for s(t) and h(t)
 function evalTest(input = '', t) {
   let buffer = ''
   Number(input);
   for (let i = 0; i < input.length; i++) {
     const element = input[i];
-    if(!isNaN(Number(element))) {
+    if (!isNaN(Number(element))) {
       buffer += element;
     }
     // if(input.slice(i,i+4) === 'rect') {
@@ -73,23 +74,31 @@ function evalTest(input = '', t) {
   }
 
   let a = eval?.(input);
-  
 
-  text(buffer, 10,10);
+
+  text(buffer, 10, 10);
   return a;
 }
 
 
 function rectImpuls(T, t) {
-  if(abs(t)<=T/2){
-    return 1/T;
+  if (abs(t) <= T / 2) {
+    return 1 / T;
   }
   return 0;
 }
 
+// trying arrow functions
+const rectImpuls2 = (T, t) => {
+  if (abs(t) <= T / 2) {
+    return 1 / T;
+  }
+  return 0;
+};
+
 function triangularImpuls(T, t) {
-  if(abs(t) <= T) {
-    return (1/T*(1-abs(t)/T));
+  if (abs(t) <= T) {
+    return (1 / T * (1 - abs(t) / T));
   }
   else {
     return 0;
@@ -98,15 +107,15 @@ function triangularImpuls(T, t) {
 
 function randomImpuls(T, t) {
   //return rectImpuls(1, t) + rectImpuls(.5, t-1);
-  if(t>-.5 && t<.5) {
-    return t+.5;
+  if (t > -.5 && t < .5) {
+    return t + .5;
   }
   return 0;
 }
 
 function paralbolaImpuls(T, t) {
-  if(abs(t)<=0.5){
-    return (t-.5)*(t-.5);
+  if (abs(t) <= 0.5) {
+    return (t - .5) * (t - .5);
   }
   return 0;
 }
@@ -114,7 +123,7 @@ function paralbolaImpuls(T, t) {
 function drawst(impuls, t0, T) {
   beginShape();
   for (let x = xMin; x <= xMax; x += 0.01) {
-    let y = impuls(T,(x-t0));
+    let y = impuls(T, (x - t0));
     vertex(map(x, xMin, xMax, 0, width), map(y, yMin, yMax, height, 0));
   }
   endShape();
@@ -124,7 +133,7 @@ function drawht(impuls, t0, T) {
   beginShape();
   for (let x = xMin; x <= xMax; x += 0.01) {
     // mirroring the graph around the y achsis
-    let y = impuls(T,(-x+t0));
+    let y = impuls(T, (-x + t0));
     vertex(map(x, xMin, xMax, 0, width), map(y, yMin, yMax, height, 0));
   }
   endShape();
@@ -141,8 +150,8 @@ function drawConvolution(st, ht) {
 }
 
 function convolution(st, ht, t) {
-  let a = a1-T/2;
-  let b = b2+T/2;
+  let a = a1 - T / 2;
+  let b = b2 + T / 2;
   let tau1, tau2, y1, y2;
   let dtau = 0.01;
   let result = 0;
@@ -151,11 +160,11 @@ function convolution(st, ht, t) {
   tau2 = a + dtau;
 
   // making sub rectangles for approximatin overlapping area
-  for (let i = a; i < b; i+= dtau) {
+  for (let i = a; i < b; i += dtau) {
 
     // continous convolution
-    y1 = st(T, tau1) * ht(T2, (t-tau1));
-    y2 = st(T, tau2) * ht(T2, (t-tau2));
+    y1 = st(T, tau1) * ht(T2, (t - tau1));
+    y2 = st(T, tau2) * ht(T2, (t - tau2));
 
     // calculating the area of a sub rectangle
     result += dtau * (y1 + y2) / 2;
