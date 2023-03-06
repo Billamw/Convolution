@@ -1,13 +1,13 @@
 let xMin = -13;
 let xMax = 13;
 let yMin = -7;
-let yMax = 13;
+let yMax = 32;
 
 // let signal1 = [.3,.6,.7,.8,.9];
 // let signal2 = [.9,.8,.7,.8];
 
-let signal1 = [1,1.2,1.4,1.6,1,.5];
-let signal2 = [1,1.2,1.4,1.6];
+let signal2 = [8,16,32,4,8,4,16,16];
+let signal1 = [1/16,1/4,3/8,1/4,1/16];
 
 let t0 = 0;
 let t02 = 0-signal2.length/2;
